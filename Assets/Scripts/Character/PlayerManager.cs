@@ -4,12 +4,10 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
+[RequireComponent(typeof(Animator))]
 public class PlayerManager : MonoBehaviourPunCallbacks, IPunObservable
 {
     #region Private Serializable Fields
-
-    [SerializeField]
-    private Vector3 destination;
 
     [Tooltip("The Player's UI GameObject Prefab")]
     [SerializeField]
@@ -22,6 +20,29 @@ public class PlayerManager : MonoBehaviourPunCallbacks, IPunObservable
     [Tooltip("The local player instance. Use this to know if the local player is represented in the Scene")]
     public static GameObject LocalPlayerInstance;
 
+    private Animator animator;
+
+    #region Public Methods
+
+    public void MovePlayerToTile(Vector3 destination)
+    {
+        if (!photonView.IsMine && PhotonNetwork.IsConnected) {
+            return;
+        }
+
+        //rotate object
+        float rotationAngle = Vector3.SignedAngle(gameObject.transform.forward, destination - gameObject.transform.position, Vector3.up);
+        gameObject.transform.Rotate(0, rotationAngle, 0);
+
+        //set animation
+        animator.SetBool("ShouldRun", true);
+
+        //start coroutine to move to destination
+        StartCoroutine(MoveOverSeconds(gameObject, destination, 2));
+    }
+
+    #endregion
+
     #region IPunObservable implemantation
 
     public void OnPhotonSerializeView(PhotonStream stream, PhotonMessageInfo info)
@@ -33,6 +54,7 @@ public class PlayerManager : MonoBehaviourPunCallbacks, IPunObservable
             this.health = (byte)stream.ReceiveNext();
         }
     }
+
     #endregion
 
     void Awake()
@@ -43,6 +65,8 @@ public class PlayerManager : MonoBehaviourPunCallbacks, IPunObservable
         if (photonView.IsMine) {
             PlayerManager.LocalPlayerInstance = this.gameObject;
         }
+
+        animator = GetComponent<Animator>();
         // #Critical
         // we flag as don't destroy on load so that instance survives level synchronization, thus giving a seamless experience when levels load.
         DontDestroyOnLoad(this.gameObject);
@@ -74,6 +98,8 @@ public class PlayerManager : MonoBehaviourPunCallbacks, IPunObservable
         }
     }
 
+    #region Subscribing to SceneManager
+
     /* Subscribe to sceneLoaded */
     public override void OnEnable()
     {
@@ -88,11 +114,12 @@ public class PlayerManager : MonoBehaviourPunCallbacks, IPunObservable
         base.OnDisable();
     }
 
+    #endregion
+
     private void OnLevelFinishedLoading(Scene scene, LoadSceneMode mode)
     {
         InstantiatePlayerUI();
     }
-
 
     private void InstantiatePlayerUI()
     {
@@ -102,30 +129,30 @@ public class PlayerManager : MonoBehaviourPunCallbacks, IPunObservable
 
     private void procesInput()
     {
-        if (Input.GetKeyDown(KeyCode.Space)) {
-
-            //rotate object
-            float rotationAngle = Vector3.Angle(gameObject.transform.forward, destination);
-            gameObject.transform.Rotate(0, rotationAngle, 0);
-
-            //start coroutine to move to destination
-            StartCoroutine(MoveOverSeconds(destination, 2));
-        }
-
         if (Input.GetKeyDown(KeyCode.Q)) {
             health--;
         }
     }
 
-    public IEnumerator MoveOverSeconds(Vector3 destination, float seconds)
+    //TODO mby move these to helper class
+    private IEnumerator MoveOverSpeed(Vector3 destination, float speed)
+    {
+        while (gameObject.transform.position != destination) {
+            gameObject.transform.position = Vector3.MoveTowards(gameObject.transform.position, destination, speed * Time.deltaTime);
+            yield return new WaitForEndOfFrame();
+        }
+    }
+
+    private IEnumerator MoveOverSeconds(GameObject objectToMove, Vector3 end, float seconds)
     {
         float elapsedTime = 0;
-        Vector3 startingPos = gameObject.transform.position;
+        Vector3 startingPos = objectToMove.transform.position;
         while (elapsedTime < seconds) {
-            gameObject.transform.position = Vector3.Lerp(startingPos, destination, (elapsedTime / seconds));
+            objectToMove.transform.position = Vector3.Lerp(startingPos, end, (elapsedTime / seconds));
             elapsedTime += Time.deltaTime;
             yield return new WaitForEndOfFrame();
         }
-        gameObject.transform.position = destination;
+        objectToMove.transform.position = end;
     }
+
 }

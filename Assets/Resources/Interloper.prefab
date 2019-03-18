@@ -2600,7 +2600,6 @@ GameObject:
   - component: {fileID: 8456286018157441600}
   - component: {fileID: 8365566318860645434}
   - component: {fileID: 1298671631305727}
-  - component: {fileID: 5231067472170166532}
   - component: {fileID: 1298671631305728}
   - component: {fileID: 6845061219630778847}
   - component: {fileID: 6923494319206154119}
@@ -2622,7 +2621,7 @@ Transform:
   m_GameObject: {fileID: 8453250643804238092}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalScale: {x: 5, y: 5, z: 5}
   m_Children:
   - {fileID: 8450111313786504334}
   - {fileID: 8456404691695212626}
@@ -2667,18 +2666,6 @@ CharacterController:
   m_SkinWidth: 0.08
   m_MinMoveDistance: 0.001
   m_Center: {x: 0, y: 1, z: 0}
---- !u!114 &5231067472170166532
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8453250643804238092}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 4eecf620925d46147974ddacd025ff5b, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!54 &1298671631305728
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -2770,7 +2757,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3195b974b87d92d4c86f10a59fafad54, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  destination: {x: 3, y: 0, z: 3}
   PlayerUiPrefab: {fileID: 3691491609990084587, guid: cd0c94e146b69f544aee07fc650d96c6,
     type: 3}
   health: 4

@@ -44,7 +44,6 @@ public class GameManager : MonoBehaviourPunCallbacks
 
     #endregion
 
-
     void Start()
     {
         Instance = this;
@@ -70,9 +69,19 @@ public class GameManager : MonoBehaviourPunCallbacks
     }
 
 
+    #region Public methods
+
     /* A wrapper on PhotonNetwork.LeaveRoom(). We might need to do more logic when players leave.*/
     public void LeaveRoom()
     {
         PhotonNetwork.LeaveRoom();
     }
+
+    public void MovePlayerToTile(Vector3 destination)
+    {
+        //TODO logic here to check if we can actually move there
+        PlayerManager.LocalPlayerInstance.GetComponent<PlayerManager>().MovePlayerToTile(destination);
+    }
+
+    #endregion
 }
