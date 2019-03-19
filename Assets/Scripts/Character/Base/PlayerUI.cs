@@ -40,7 +40,7 @@ public class PlayerUI : MonoBehaviour
     public void Update()
     {
         if (playerHealthSlider != null) {
-            playerHealthSlider.value = target.health;
+            playerHealthSlider.value = target.StatsData.health;
         }
 
         if (target == null) {

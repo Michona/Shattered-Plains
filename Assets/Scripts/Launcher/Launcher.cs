@@ -37,8 +37,6 @@ public class Launcher : MonoBehaviourPunCallbacks
         controlPanel.SetActive(true);
     }
 
-
-
     /** 
      * Start the connection process
      * - If already connected, we attempt joining a random 
@@ -72,7 +70,6 @@ public class Launcher : MonoBehaviourPunCallbacks
             PhotonNetwork.JoinRandomRoom();
         }
     }
-
 
     public override void OnDisconnected(DisconnectCause cause)
     {
