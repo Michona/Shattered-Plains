@@ -45,3 +45,5 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   playerPrefab: {fileID: 8453250643804238092, guid: a10c77eab5d5f154b9660b686fc4b67d,
     type: 3}
+  gridPrefab: {fileID: 4418852740727863480, guid: 08710d560acf9574fa291040f9a49294,
+    type: 3}

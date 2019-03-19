@@ -1,17 +1,21 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using Photon.Pun;
 
-public class Tile : MonoBehaviour
+public class Tile : MonoBehaviourPunCallbacks
 {
+    /* Id of the tile */
+    public byte Id;
 
-    // Start is called before the first frame update
+    public bool isOccupied;
+
     void Start()
     {
+        Id = BoardManager.Instance.ParseName(this.name);
+        isOccupied = false;
     }
 
     public void Selected()
     {
-        GameManager.Instance.MovePlayerToTile(gameObject.transform.position);
+        GameManager.Instance.MovePlayerToTile(this);
     }
+
 }

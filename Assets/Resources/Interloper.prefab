@@ -2602,9 +2602,7 @@ GameObject:
   - component: {fileID: 1298671631305727}
   - component: {fileID: 1298671631305728}
   - component: {fileID: 6845061219630778847}
-  - component: {fileID: 6923494319206154119}
-  - component: {fileID: 5830218603075030236}
-  - component: {fileID: 3926800629869315729}
+  - component: {fileID: 769200112548596559}
   m_Layer: 0
   m_Name: Interloper
   m_TagString: Untagged
@@ -2679,7 +2677,7 @@ Rigidbody:
   m_AngularDrag: 0.05
   m_UseGravity: 1
   m_IsKinematic: 1
-  m_Interpolate: 0
+  m_Interpolate: 1
   m_Constraints: 0
   m_CollisionDetection: 0
 --- !u!114 &6845061219630778847
@@ -2700,13 +2698,11 @@ MonoBehaviour:
   Synchronization: 3
   OwnershipTransfer: 0
   ObservedComponents:
-  - {fileID: 5830218603075030236}
-  - {fileID: 6923494319206154119}
-  - {fileID: 3926800629869315729}
+  - {fileID: 769200112548596559}
   viewIdField: 0
   InstantiationId: 1
   isRuntimeInstantiated: 0
---- !u!114 &6923494319206154119
+--- !u!114 &769200112548596559
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -2715,48 +2711,9 @@ MonoBehaviour:
   m_GameObject: {fileID: 8453250643804238092}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 9b8c4a61274f60b4ea5fb4299cfdbf14, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  ShowLayerWeightsInspector: 1
-  ShowParameterInspector: 1
-  m_SynchronizeParameters:
-  - Type: 1
-    SynchronizeType: 0
-    Name: Speed
-  - Type: 4
-    SynchronizeType: 1
-    Name: ShouldRun
-  m_SynchronizeLayers:
-  - SynchronizeType: 0
-    LayerIndex: 0
---- !u!114 &5830218603075030236
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8453250643804238092}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 627855c7f81362d41938ffe0b1475957, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  m_SynchronizePosition: 1
-  m_SynchronizeRotation: 1
-  m_SynchronizeScale: 0
---- !u!114 &3926800629869315729
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8453250643804238092}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 3195b974b87d92d4c86f10a59fafad54, type: 3}
+  m_Script: {fileID: 11500000, guid: 1887ba943a0ab4f45a8461d3666028c0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   PlayerUiPrefab: {fileID: 3691491609990084587, guid: cd0c94e146b69f544aee07fc650d96c6,
     type: 3}
-  health: 4
+  currentTilePosition: 1
