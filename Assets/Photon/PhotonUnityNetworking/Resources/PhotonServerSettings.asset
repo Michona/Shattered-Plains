@@ -33,5 +33,9 @@ MonoBehaviour:
   - Fire
   - RespawnSpaceship
   - UpdateTileStatus
+  - StartRunningRpc
+  - UpdateTileForAll
+  - SetRunningStateRPC
+  - UpdateCurrentTileRPC
   DisableAutoOpenWizard: 1
   ShowSettings: 1

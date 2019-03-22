@@ -56,7 +56,6 @@ public class GameManager : MonoBehaviourPunCallbacks
         }
     }
 
-
     #region Public methods
 
     /* A wrapper on PhotonNetwork.LeaveRoom(). We might need to do more logic when players leave.*/
@@ -65,10 +64,11 @@ public class GameManager : MonoBehaviourPunCallbacks
         PhotonNetwork.LeaveRoom();
     }
 
+    /* If we are allowed to move there -> Fire an event. */
     public void MovePlayerToTile(Tile selectedTile)
     {
         if (!selectedTile.isOccupied) {
-            Interloper.LocalInterloperInstance.GetComponent<Interloper>().UpdateTile(selectedTile.Id);
+            EventHub.Instance.FireEvent(new TileSelectedEvent(selectedTile));
         }
     }
 

@@ -2603,6 +2603,7 @@ GameObject:
   - component: {fileID: 1298671631305728}
   - component: {fileID: 6845061219630778847}
   - component: {fileID: 769200112548596559}
+  - component: {fileID: 4062339750364870039}
   m_Layer: 0
   m_Name: Interloper
   m_TagString: Untagged
@@ -2695,10 +2696,10 @@ MonoBehaviour:
   ObservedComponentsFoldoutOpen: 1
   Group: 0
   prefixField: -1
-  Synchronization: 3
+  Synchronization: 0
   OwnershipTransfer: 0
   ObservedComponents:
-  - {fileID: 769200112548596559}
+  - {fileID: 0}
   viewIdField: 0
   InstantiationId: 1
   isRuntimeInstantiated: 0
@@ -2717,3 +2718,15 @@ MonoBehaviour:
   PlayerUiPrefab: {fileID: 3691491609990084587, guid: cd0c94e146b69f544aee07fc650d96c6,
     type: 3}
   currentTilePosition: 1
+--- !u!114 &4062339750364870039
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8453250643804238092}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2551894d964a2264ba2cdee73befb213, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 

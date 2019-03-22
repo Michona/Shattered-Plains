@@ -8,7 +8,6 @@ public class Selector : MonoBehaviour
     [SerializeField]
     private LayerMask clickableLayer;
 
-
     // Update is called once per frame
     void Update()
     {
@@ -16,12 +15,11 @@ public class Selector : MonoBehaviour
         if (Input.GetMouseButtonDown(0)) {
 
             RaycastHit hit;
-
             if (Physics.Raycast(Camera.main.ScreenPointToRay(Input.mousePosition), out hit, clickableLayer)) {
 
                 Tile tileHit;
                 if (tileHit = hit.collider.GetComponent<Tile>()) {
-                    tileHit.Selected();
+                    GameManager.Instance.MovePlayerToTile(tileHit);
                 }
             }
         }

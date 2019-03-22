@@ -9,13 +9,7 @@ public class Tile : MonoBehaviourPunCallbacks
 
     void Start()
     {
-        Id = BoardManager.Instance.ParseName(this.name);
+        Id = BoardHelper.ParseName(this.name);
         isOccupied = false;
     }
-
-    public void Selected()
-    {
-        GameManager.Instance.MovePlayerToTile(this);
-    }
-
 }

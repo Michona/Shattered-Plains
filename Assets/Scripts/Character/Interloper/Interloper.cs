@@ -20,21 +20,28 @@ public class Interloper : PlayerManager
     public override byte CurrentTilePosition { 
         get => currentTilePosition;
         set {
+            /* When positon is changed -> move to tile. */
             MovePlayerToTile(this.gameObject, value);
             currentTilePosition = value;
         } 
     }
 
-    private Animator interloperAnimator;
-    protected override Animator CustomAnimator { get => interloperAnimator; set => interloperAnimator = value; }
-
     #endregion
+
+    public override void OnEnable()
+    {
+        EventHub.Instance.AddListener<TileSelectedEvent>(UpdateCurrentTile);
+        base.OnEnable();
+    }
+
+    public override void OnDisable()
+    {
+        EventHub.Instance.RemoveListener<TileSelectedEvent>(UpdateCurrentTile);
+        base.OnDisable();
+    }
 
     void Awake()
     {
-        //Has to be set for all interlopers!
-        interloperAnimator = GetComponent<Animator>();
-
         if (!photonView.IsMine && PhotonNetwork.IsConnected) {
             return;
         }
@@ -50,12 +57,24 @@ public class Interloper : PlayerManager
         DontDestroyOnLoad(this.gameObject);
     }
 
-    public void Update()
+    /* Called after GameManager approves that we can move. We call RPC to update position on all players. */
+    private void UpdateCurrentTile(TileSelectedEvent tileEvent)
     {
-        //Test for tile pos. TODO: remove later
-        if (Input.GetKeyDown(KeyCode.Q)) {
-            Debug.Log(this.photonView.Owner.NickName + " -- " + currentTilePosition);
+        if (!photonView.IsMine && PhotonNetwork.IsConnected) {
+            return;
         }
+        byte destinationTileId = tileEvent.SelectedTile.Id;
+
+        photonView.RPC("UpdateCurrentTileRPC", RpcTarget.All, destinationTileId);
     }
+
+    [PunRPC]
+    private void UpdateCurrentTileRPC(byte destinationTileId, PhotonMessageInfo info)
+    {
+        BoardManager.Instance.SetTileState(currentTilePosition, false);
+        BoardManager.Instance.SetTileState(destinationTileId, true);
+        CurrentTilePosition = destinationTileId;
+    }
+
 
 }

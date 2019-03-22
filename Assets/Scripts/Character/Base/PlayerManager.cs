@@ -4,8 +4,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
-[RequireComponent(typeof(Animator))]
-public abstract class PlayerManager : MonoBehaviourPunCallbacks, IPunObservable
+public abstract class PlayerManager : MonoBehaviourPunCallbacks
 {
 
     #region Private Serializable Fields
@@ -21,42 +20,6 @@ public abstract class PlayerManager : MonoBehaviourPunCallbacks, IPunObservable
 
     /* An id of the tile we currently are. */
     public abstract byte CurrentTilePosition {get; set; }
-
-    protected abstract Animator CustomAnimator { get; set; }
-
-    #endregion
-
-
-    #region Public Methods
-
-
-
-    /* Called after GameManager approves that we can move. */
-    public void UpdateTile(byte destinationTileId)
-    {
-        if (!photonView.IsMine && PhotonNetwork.IsConnected) {
-            return;
-        }
-        BoardManager.Instance.SetTileFree(CurrentTilePosition);
-        BoardManager.Instance.SetTileOccupied(destinationTileId);
-
-        CurrentTilePosition = destinationTileId;
-    }
-
-    #endregion
-
-    #region IPunObservable implemantation
-
-    /* Every player should know where the characters are positioned. That's why we sync the CurrentTilePosition! */
-    public void OnPhotonSerializeView(PhotonStream stream, PhotonMessageInfo info)
-    {
-        if (stream.IsWriting) {
-            stream.SendNext(CurrentTilePosition);
-        }
-        else {
-            this.CurrentTilePosition = (byte)stream.ReceiveNext(); 
-        }
-    }
 
     #endregion
 
@@ -80,7 +43,7 @@ public abstract class PlayerManager : MonoBehaviourPunCallbacks, IPunObservable
 
     #region Private/Protected Methods
 
-    /* Called from subclasses currentTilePosition is changed. */
+    /* Called from subclasses when currentTilePosition is changed. */
     protected void MovePlayerToTile(GameObject playerObject, byte tileId)
     {
         Vector3 destination = BoardManager.Instance.GetVectorFromTileId(tileId);
@@ -88,9 +51,6 @@ public abstract class PlayerManager : MonoBehaviourPunCallbacks, IPunObservable
         //rotate object
         float rotationAngle = Vector3.SignedAngle(playerObject.transform.forward, destination - playerObject.transform.position, Vector3.up);
         playerObject.transform.Rotate(0, rotationAngle, 0);
-
-        //set animation
-        CustomAnimator.SetBool("ShouldRun", true);
 
         //start coroutine to move to destination
         StartCoroutine(MoveOverSeconds(playerObject, destination, 2));
@@ -108,7 +68,7 @@ public abstract class PlayerManager : MonoBehaviourPunCallbacks, IPunObservable
         uiGameObject.SendMessage("SetTarget", this, SendMessageOptions.RequireReceiver);
     }
 
-    /* Moves in a straght line. TODO: change so it's "manhattan" distance */
+    /* Moves in a straght line. TODO: change so it's "manhattan" movement */
     private IEnumerator MoveOverSeconds(GameObject objectToMove, Vector3 end, float seconds)
     {
         float elapsedTime = 0;

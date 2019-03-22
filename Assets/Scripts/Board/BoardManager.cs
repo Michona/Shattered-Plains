@@ -17,44 +17,15 @@ public class BoardManager : MonoBehaviourPunCallbacks
         Instance = this;
     }
 
-    public byte ParseName(string tileName)
-    {
-        return byte.Parse(tileName);
-    }
-
-    public Vector2 GetColRowFromTileId(byte tileId)
-    {
-        int row = tileId / GridSize;
-        int col = tileId - (row * GridSize);
-        return new Vector2(row, col);
-    }
-
     public Vector3 GetVectorFromTileId(byte tileId)
     {
         return GetTileFromList(tileId).gameObject.transform.position;
     }
 
-    /* Runs RPC to notify players that state of tile has changed*/
-    public void SetTileOccupied(byte tileId)
-    {
-        photonView.RPC("UpdateTileStatus", RpcTarget.All, tileId, true);
-    }
-
-    /* Runs RPC to notify players that state of tile has changed*/
-    public void SetTileFree(byte tileId)
-    {
-        photonView.RPC("UpdateTileStatus", RpcTarget.All, tileId, false);
-    }
-
-    #region RPC's
-
-    [PunRPC]
-    private void UpdateTileStatus(byte tileId, bool _isOccupied, PhotonMessageInfo info)
+    public void SetTileState(byte tileId, bool _isOccupied)
     {
         GetTileFromList(tileId).isOccupied = _isOccupied;
     }
-
-    #endregion
 
     /* Look to optimize this (order the elements in editor so this can be O(1)).*/
     private Tile GetTileFromList(byte tileId)
