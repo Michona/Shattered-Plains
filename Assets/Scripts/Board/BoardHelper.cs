@@ -1,6 +1,4 @@
 ﻿
-using System.Numerics;
-
 /* Purely static class that deals with arithmetic operations or parsing. */
 public static class BoardHelper
 {
@@ -10,10 +8,16 @@ public static class BoardHelper
         return byte.Parse(tileName);
     }
 
-    public static Vector2 GetColRowFromTileId(byte tileId)
+    public static GridPosition GetColRowFromTileId(byte tileId)
     {
-        int row = tileId / BoardManager.Instance.GridSize;
-        int col = tileId - (row * BoardManager.Instance.GridSize);
-        return new Vector2(row, col);
+        int row = tileId / Consts.GRID_SIZE;
+        int col = tileId - (row * Consts.GRID_SIZE);
+        return new GridPosition(col, row);
     }
+
+    public static byte GetTileIdFromColRow(GridPosition pos)
+    {
+        return (byte)(pos.Row * Consts.GRID_SIZE + pos.Col);
+    }
+
 }
