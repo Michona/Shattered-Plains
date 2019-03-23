@@ -1,6 +1,4 @@
 ﻿using Photon.Pun;
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class Interloper : PlayerManager
@@ -16,7 +14,7 @@ public class Interloper : PlayerManager
     public override Stats StatsData { get => stats; set => stats = value; }
 
     [SerializeField]
-    private byte currentTilePosition;
+    private byte currentTilePosition = 1;
     public override byte CurrentTilePosition { 
         get => currentTilePosition;
         set {
@@ -72,8 +70,8 @@ public class Interloper : PlayerManager
     private void UpdateCurrentTileRPC(byte destinationTileId, PhotonMessageInfo info)
     {
         BoardManager.Instance.SetTileState(currentTilePosition, false);
-        BoardManager.Instance.SetTileState(destinationTileId, true);
         CurrentTilePosition = destinationTileId;
+        BoardManager.Instance.SetTileState(destinationTileId, true);
     }
 
 

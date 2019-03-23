@@ -1,6 +1,5 @@
 ﻿using Photon.Pun;
 using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
@@ -19,7 +18,7 @@ public abstract class PlayerManager : MonoBehaviourPunCallbacks
     public abstract Stats StatsData { get; set; }
 
     /* An id of the tile we currently are. */
-    public abstract byte CurrentTilePosition {get; set; }
+    public abstract byte CurrentTilePosition { get; set; }
 
     #endregion
 
@@ -46,14 +45,7 @@ public abstract class PlayerManager : MonoBehaviourPunCallbacks
     /* Called from subclasses when currentTilePosition is changed. */
     protected void MovePlayerToTile(GameObject playerObject, byte tileId)
     {
-        Vector3 destination = BoardManager.Instance.GetVectorFromTileId(tileId);
-
-        //rotate object
-        float rotationAngle = Vector3.SignedAngle(playerObject.transform.forward, destination - playerObject.transform.position, Vector3.up);
-        playerObject.transform.Rotate(0, rotationAngle, 0);
-
-        //start coroutine to move to destination
-        StartCoroutine(MoveOverSeconds(playerObject, destination, 2));
+        StartCoroutine(ManhattanMove(playerObject, tileId));
     }
 
     private void OnLevelFinishedLoading(Scene scene, LoadSceneMode mode)
@@ -68,17 +60,30 @@ public abstract class PlayerManager : MonoBehaviourPunCallbacks
         uiGameObject.SendMessage("SetTarget", this, SendMessageOptions.RequireReceiver);
     }
 
-    /* Moves in a straght line. TODO: change so it's "manhattan" movement */
-    private IEnumerator MoveOverSeconds(GameObject objectToMove, Vector3 end, float seconds)
+    private IEnumerator ManhattanMove(GameObject objectToMove, byte finalTile)
     {
         float elapsedTime = 0;
+        float maxTime = Consts.MOVE_SECONDS;
         Vector3 startingPos = objectToMove.transform.position;
-        while (elapsedTime < seconds) {
-            objectToMove.transform.position = Vector3.Lerp(startingPos, end, (elapsedTime / seconds));
-            elapsedTime += Time.deltaTime;
-            yield return new WaitForEndOfFrame();
+
+        /* Get positions for grid like movement according to the current tile and the selected tile! */
+        Vector3[] path = BoardManager.Instance.GetVector3Path(CurrentTilePosition, finalTile);
+
+        foreach (Vector3 destination in path) {
+
+            float rotationAngle = Vector3.SignedAngle(objectToMove.transform.forward, destination - objectToMove.transform.position, Vector3.up);
+            objectToMove.transform.Rotate(0, rotationAngle, 0);
+
+            elapsedTime = 0;
+            while (elapsedTime < maxTime) {
+
+                objectToMove.transform.position = Vector3.Lerp(startingPos, destination, (elapsedTime / maxTime));
+                elapsedTime += Time.deltaTime;
+                yield return new WaitForEndOfFrame();
+            }
+            objectToMove.transform.position = destination;
+            startingPos = objectToMove.transform.position;
         }
-        objectToMove.transform.position = end;
     }
 
     #endregion
