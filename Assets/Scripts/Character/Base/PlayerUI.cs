@@ -18,9 +18,9 @@ public class PlayerUI : MonoBehaviour
 
     #endregion
 
-    private PlayerManager target;
+    private CharacterManager target;
 
-    public void SetTarget(PlayerManager _target)
+    public void SetTarget(CharacterManager _target)
     {
         if (_target == null) {
             Debug.LogError("Missing PlayerManager", this);
@@ -41,7 +41,7 @@ public class PlayerUI : MonoBehaviour
     public void Update()
     {
         if (playerHealthSlider != null) {
-            playerHealthSlider.value = target.StatsData.health;
+            playerHealthSlider.value = target.Properties.Health;
         }
 
         if (target == null) {

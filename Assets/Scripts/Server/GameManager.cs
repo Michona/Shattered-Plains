@@ -6,13 +6,10 @@ using Photon.Realtime;
 
 public class GameManager : MonoBehaviourPunCallbacks
 {
-
     public static GameManager Instance;
 
-    [Tooltip("The prefab to use for representing the player")]
-    public GameObject playerPrefab;
-
-    public GameObject gridPrefab;
+    /* Game objects to be instantiated on the network */
+    public GameObject interloperGO;
 
     #region Photon Callbacks
 
@@ -38,12 +35,17 @@ public class GameManager : MonoBehaviourPunCallbacks
     void Start()
     {
         Instance = this;
+        InstantiateCharacters();
+    } 
 
+    private void InstantiateCharacters()
+    {
         if (Interloper.LocalInterloperInstance == null) {
             // we're in a room. spawn a character for the local player. it gets synced by using PhotonNetwork.Instantiate
-            PhotonNetwork.Instantiate(this.playerPrefab.name, new Vector3(0f, 5f, 0f), Quaternion.identity, 0);
+            interloperGO = PhotonNetwork.Instantiate(this.interloperGO.name, BoardManager.Instance.GetVectorFromTileId((byte)PhotonNetwork.LocalPlayer.ActorNumber), Quaternion.identity, 0);
+            // #critical we use the ACTOR NUMBER to set spawn positions. TODO change that in the future!!
         }
-    } 
+    }
 
     /* Loads the MainBoard level if we are master client. */
     private void LoadArena()
@@ -67,6 +69,11 @@ public class GameManager : MonoBehaviourPunCallbacks
         if (!selectedTile.isOccupied) {
             EventHub.Instance.FireEvent(new TileSelectedEvent(selectedTile));
         }
+    }
+
+    public void SelectPlayer(Interloper interloperHit)
+    {
+        EventHub.Instance.FireEvent(new CharacterSelectedEvent(interloperHit.photonView.ViewID));
     }
 
     #endregion

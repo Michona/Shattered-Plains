@@ -1,9 +1,11 @@
 ﻿using Photon.Pun;
+using Photon.Pun.UtilityScripts;
+using Photon.Realtime;
 using System.Collections;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
-public abstract class PlayerManager : MonoBehaviourPunCallbacks
+public abstract class CharacterManager : MonoBehaviourPunCallbacks
 {
 
     #region Private Serializable Fields
@@ -15,9 +17,13 @@ public abstract class PlayerManager : MonoBehaviourPunCallbacks
 
     #region Abstract Fields
 
-    public abstract Stats StatsData { get; set; }
+    /* Character properties that don't change during the game. */
+    public abstract CharacterProperties Properties { get; set; }
 
-    /* An id of the tile we currently are. */
+    /* Represents the current state of the character. It changes during the game. */
+    protected abstract CharacterState State { get; set; }
+
+    /* An id of the tile we currently are. We have it separate so that it can get networked. */
     public abstract byte CurrentTilePosition { get; set; }
 
     #endregion
@@ -40,7 +46,7 @@ public abstract class PlayerManager : MonoBehaviourPunCallbacks
 
     #endregion
 
-    #region Private/Protected Methods
+    #region Protected Methods called from subclasses
 
     /* Called from subclasses when currentTilePosition is changed. */
     protected void MovePlayerToTile(GameObject playerObject, byte tileId)
@@ -48,16 +54,19 @@ public abstract class PlayerManager : MonoBehaviourPunCallbacks
         StartCoroutine(ManhattanMove(playerObject, tileId));
     }
 
-    private void OnLevelFinishedLoading(Scene scene, LoadSceneMode mode)
-    {
-        InstantiatePlayerUI();
-    }
-
     /* This should get overriden if players have different HUD's */
     protected void InstantiatePlayerUI()
     {
         GameObject uiGameObject = Instantiate(this.PlayerUiPrefab);
         uiGameObject.SendMessage("SetTarget", this, SendMessageOptions.RequireReceiver);
+    }
+
+
+    #endregion
+
+    private void OnLevelFinishedLoading(Scene scene, LoadSceneMode mode)
+    {
+        InstantiatePlayerUI();
     }
 
     private IEnumerator ManhattanMove(GameObject objectToMove, byte finalTile)
@@ -85,6 +94,4 @@ public abstract class PlayerManager : MonoBehaviourPunCallbacks
             startingPos = objectToMove.transform.position;
         }
     }
-
-    #endregion
 }

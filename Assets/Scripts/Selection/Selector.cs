@@ -1,14 +1,12 @@
-﻿using System.Collections;
-using System.Collections.Generic;
+﻿using Photon.Pun;
 using UnityEngine;
 
 [RequireComponent(typeof(LayerMask))]
-public class Selector : MonoBehaviour
+public class Selector : MonoBehaviourPunCallbacks
 {
     [SerializeField]
     private LayerMask clickableLayer;
 
-    // Update is called once per frame
     void Update()
     {
 
@@ -18,11 +16,21 @@ public class Selector : MonoBehaviour
             if (Physics.Raycast(Camera.main.ScreenPointToRay(Input.mousePosition), out hit, clickableLayer)) {
 
                 Tile tileHit;
+                Interloper interloperHit;
+                //We hit a tile.
                 if (tileHit = hit.collider.GetComponent<Tile>()) {
                     GameManager.Instance.MovePlayerToTile(tileHit);
                 }
+                //We hit interloper character.
+                else if (interloperHit = hit.collider.GetComponent<Interloper>()) {
+                    GameManager.Instance.SelectPlayer(interloperHit);
+                }
             }
         }
-        
+
+        //Temporaraly here for testing purpose. 
+        if (Input.GetKeyDown(KeyCode.Q)) {
+            TurnManager.Instance.SwitchTurn();
+        }
     }
 }
