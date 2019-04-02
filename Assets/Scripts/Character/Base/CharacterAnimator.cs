@@ -1,11 +1,9 @@
 ﻿using Photon.Pun;
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 /* Generic animator script. Characters should extend and add/override logic. Attached to playerPrefab. */
 [RequireComponent(typeof(Animator))]
-public class PlayerAnimator : MonoBehaviourPunCallbacks
+public class CharacterAnimator : MonoBehaviourPunCallbacks
 {
 
     private Animator characterAnimator;
@@ -31,7 +29,8 @@ public class PlayerAnimator : MonoBehaviourPunCallbacks
             return;
         }
 
-        photonView.RPC("SetRunningStateRPC", RpcTarget.All);
+        //Animation disabled (for now).
+        //photonView.RPC("SetRunningStateRPC", RpcTarget.All);
     }
 
     [PunRPC]

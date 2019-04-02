@@ -10,6 +10,7 @@ GameObject:
   m_Component:
   - component: {fileID: 5507084505611620430}
   - component: {fileID: 5662854341334843266}
+  - component: {fileID: 3617089912509931122}
   m_Layer: 0
   m_Name: GameManager
   m_TagString: Untagged
@@ -43,7 +44,17 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1811e4604f992804f80abf113e75a436, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  playerPrefab: {fileID: 8453250643804238092, guid: a10c77eab5d5f154b9660b686fc4b67d,
+  interloperGO: {fileID: 8453250643804238092, guid: a10c77eab5d5f154b9660b686fc4b67d,
     type: 3}
-  gridPrefab: {fileID: 4418852740727863480, guid: 08710d560acf9574fa291040f9a49294,
-    type: 3}
+--- !u!114 &3617089912509931122
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5463872888076827159}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: bbd0d4364ec688c4f95f7af6b1a7e28f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 

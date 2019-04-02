@@ -14,7 +14,7 @@ public class BoardManager : MonoBehaviourPunCallbacks
     #region Pathfinding fields
 
     /* used for BFS on path finding */
-    private bool[,] visited = new bool[3, 3];
+    private bool[,] visited = new bool[Consts.GRID_SIZE, Consts.GRID_SIZE];
 
     private readonly int[] dx = new int[] {-1, 0, 1, 0}; 
     private readonly int[] dy = new int[] {0, -1, 0, 1};
@@ -36,6 +36,20 @@ public class BoardManager : MonoBehaviourPunCallbacks
     public Vector3 GetVectorFromTileId(byte tileId)
     {
         return GetTileFromList(tileId).gameObject.transform.position;
+    }
+
+    public byte GetTileIdFromVector(Vector3 pos)
+    {
+        float distance = float.MaxValue;
+        byte closestTileId = 0;
+
+        foreach (Tile tile in Tiles) {
+            if (Vector3.Distance(tile.gameObject.transform.position, pos) < distance) {
+                distance = Vector3.Distance(tile.gameObject.transform.position, pos);
+                closestTileId = tile.Id;
+            }
+        }
+        return closestTileId;
     }
 
     /* Updates the state of the tile. Usually runs on all clients! */

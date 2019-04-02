@@ -14,7 +14,7 @@ public class EventHub
         }
     }
 
-    public delegate void EventDelegate<T>(T e) where T : GameEvent;
+    public delegate void EventDelegate<T> (T e) where T : GameEvent;
     private Dictionary<Type, Delegate> delegates = new Dictionary<Type, Delegate>();
 
     public void AddListener<T> (EventDelegate<T> listener) where T: GameEvent
@@ -45,7 +45,7 @@ public class EventHub
         }
     }
 
-    public void FireEvent<T>(T gameEvent) where T : GameEvent
+    public void FireEvent<T> (T gameEvent) where T : GameEvent
     {
         if (gameEvent == null) {
             throw new NullReferenceException();
