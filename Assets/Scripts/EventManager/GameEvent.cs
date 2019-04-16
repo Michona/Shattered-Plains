@@ -16,13 +16,13 @@ public class TileSelectedEvent : GameEvent
 
 public class CharacterSelectedEvent : GameEvent
 {
-    public CharacterSelectedEvent(int _photonViewId)
+    public CharacterSelectedEvent(int _characterID)
     {
-        this.ID = _photonViewId;
+        this.CharacterID = _characterID;
     }
 
     /* Photon view id of the game object selected. */
-    public int ID;
+    public int CharacterID;
 }
 
 public class EnablePlayerEvent: GameEvent
