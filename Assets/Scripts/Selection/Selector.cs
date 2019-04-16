@@ -16,14 +16,14 @@ public class Selector : MonoBehaviourPunCallbacks
             if (Physics.Raycast(Camera.main.ScreenPointToRay(Input.mousePosition), out hit, clickableLayer)) {
 
                 Tile tileHit;
-                Interloper interloperHit;
+                CBaseManager characterHit;
                 //We hit a tile.
                 if (tileHit = hit.collider.GetComponent<Tile>()) {
                     GameManager.Instance.MovePlayerToTile(tileHit);
                 }
-                //We hit interloper character.
-                else if (interloperHit = hit.collider.GetComponent<Interloper>()) {
-                    GameManager.Instance.SelectPlayer(interloperHit);
+                //We hit character.
+                else if (characterHit = hit.collider.GetComponent<CBaseManager>()) {
+                    GameManager.Instance.SelectPlayer(characterHit);
                 }
             }
         }

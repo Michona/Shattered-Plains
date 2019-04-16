@@ -2,7 +2,7 @@
 using Photon.Realtime;
 using UnityEngine;
 
-public class Interloper : CharacterManager
+public class Interloper : CBaseManager
 {
 
     /* The local player instance. Use this to know if the local player is represented in the Scene" */
@@ -11,24 +11,11 @@ public class Interloper : CharacterManager
     #region Fields from PlayerManager
 
     [SerializeField]
-    private CharacterProperties properties = new CharacterProperties(2,3); //just mock values. Change later!
-    public override CharacterProperties Properties { get => properties; set => properties = value; }
+    private CProperties properties = new CProperties(2,3); //just mock values. Change later!
+    public override CProperties Properties { get => properties; }
 
-    private CharacterState state = new CharacterState();
-    protected override CharacterState State { get => state; set => state = value; }
-
-    [SerializeField]
-    private byte currentTilePosition = 1;
-    public override byte CurrentTilePosition { 
-        get => currentTilePosition;
-        set {
-            /* When positon is changed -> move to tile. */
-            MovePlayerToTile(this.gameObject, value);
-            currentTilePosition = value;
-            state.IsSelected = false;
-        } 
-    }
-
+    private CState state = new CState();
+    public override CState State { get => state; }
 
     #endregion
 
@@ -36,7 +23,6 @@ public class Interloper : CharacterManager
 
     public override void OnEnable()
     {
-        EventHub.Instance.AddListener<TileSelectedEvent>(UpdateCurrentTile);
         EventHub.Instance.AddListener<CharacterSelectedEvent>(UpdateIsSelected);
         EventHub.Instance.AddListener<EnablePlayerEvent>(UpdateEnabledState);
         base.OnEnable();
@@ -44,7 +30,6 @@ public class Interloper : CharacterManager
 
     public override void OnDisable()
     {
-        EventHub.Instance.RemoveListener<TileSelectedEvent>(UpdateCurrentTile);
         EventHub.Instance.RemoveListener<CharacterSelectedEvent>(UpdateIsSelected);
         EventHub.Instance.RemoveListener<EnablePlayerEvent>(UpdateEnabledState);
         base.OnDisable();
@@ -58,8 +43,10 @@ public class Interloper : CharacterManager
             return;
         }
 
+
         properties.PlayerID = PhotonNetwork.LocalPlayer.ActorNumber;
-        Interloper.LocalInterloperInstance = this.gameObject;
+        properties.CharacterID = photonView.ViewID;
+        LocalInterloperInstance = this.gameObject;
 
         if (PlayerUiPrefab != null) {
             InstantiatePlayerUI();
@@ -69,46 +56,14 @@ public class Interloper : CharacterManager
         DontDestroyOnLoad(this.gameObject);
     }
     
-    void Start()
-    {
-        if (!photonView.IsMine && PhotonNetwork.IsConnected) {
-            return;
-        }
-        //Set the current tile position to where it spawned.
-        currentTilePosition = BoardManager.Instance.GetTileIdFromVector(this.gameObject.transform.position);
-    }
-
-    /* Called after GameManager approves that we can move. We call RPC to update position on all players. */
-    private void UpdateCurrentTile(TileSelectedEvent tileEvent)
-    {
-        if (!state.CanMove) {
-            return;
-        }
-
-        if (!photonView.IsMine && PhotonNetwork.IsConnected) {
-            return;
-        }
-        byte destinationTileId = tileEvent.SelectedTile.Id;
-
-        photonView.RPC("UpdateCurrentTileRPC", RpcTarget.All, destinationTileId);
-    }
-
-    [PunRPC]
-    private void UpdateCurrentTileRPC(byte destinationTileId, PhotonMessageInfo info)
-    {
-        BoardManager.Instance.SetTileState(currentTilePosition, false);
-        CurrentTilePosition = destinationTileId;
-        BoardManager.Instance.SetTileState(destinationTileId, true);
-    }
-
     /* Called after GameManager approves. */
-    private void UpdateIsSelected(CharacterSelectedEvent charSelectedEvent)
+    private void UpdateIsSelected(CharacterSelectedEvent characterSelectedEvent)
     {
         if (!photonView.IsMine && PhotonNetwork.IsConnected) {
             return;
         }
 
-        if (charSelectedEvent.ID == photonView.ViewID) {
+        if (characterSelectedEvent.CharacterID == properties.CharacterID) {
             // If its clicked twice -> deselect it.
             state.IsSelected = state.IsSelected ^ true;
         }
@@ -126,6 +81,12 @@ public class Interloper : CharacterManager
     [PunRPC]
     private void UpdateEnabledStateRPC(byte actorNumber)
     {
-        state.CanMove = properties.PlayerID == actorNumber;
+        if (properties.PlayerID == actorNumber) {
+            state.ResetTurn();
+            state.CanMove = true;
+        }
+        else {
+            state.CanMove = false;
+        }
     }
 }

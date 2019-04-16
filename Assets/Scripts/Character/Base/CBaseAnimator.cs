@@ -3,7 +3,7 @@ using UnityEngine;
 
 /* Generic animator script. Characters should extend and add/override logic. Attached to playerPrefab. */
 [RequireComponent(typeof(Animator))]
-public class CharacterAnimator : MonoBehaviourPunCallbacks
+public class CBaseAnimator : MonoBehaviourPunCallbacks
 {
 
     private Animator characterAnimator;
@@ -29,15 +29,5 @@ public class CharacterAnimator : MonoBehaviourPunCallbacks
             return;
         }
 
-        //Animation disabled (for now).
-        //photonView.RPC("SetRunningStateRPC", RpcTarget.All);
     }
-
-    [PunRPC]
-    void SetRunningStateRPC()
-    {
-        characterAnimator.SetBool("ShouldRun", true);
-    }
-
-    /* Should implement StopRunning() method, listening to event when the player reaches the destination! */
 }

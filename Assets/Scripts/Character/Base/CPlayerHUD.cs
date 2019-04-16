@@ -4,7 +4,7 @@ using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
-public class PlayerUI : MonoBehaviour
+public class CPlayerHUD : MonoBehaviour
 {
     #region Private Fields
 
@@ -18,9 +18,9 @@ public class PlayerUI : MonoBehaviour
 
     #endregion
 
-    private CharacterManager target;
+    private CBaseManager target;
 
-    public void SetTarget(CharacterManager _target)
+    public void SetTarget(CBaseManager _target)
     {
         if (_target == null) {
             Debug.LogError("Missing PlayerManager", this);

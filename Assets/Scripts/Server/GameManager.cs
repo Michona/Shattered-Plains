@@ -11,6 +11,10 @@ public class GameManager : MonoBehaviourPunCallbacks
     /* Game objects to be instantiated on the network */
     public GameObject interloperGO;
 
+    /* Local Selected Character. 
+     * Needs to keep this always updated, since it's a single source of infomation about the character. */
+    private CBaseManager selectedCharacter;
+
     #region Photon Callbacks
 
     /* Called when local player left the room. We load the lobby then. */
@@ -31,6 +35,7 @@ public class GameManager : MonoBehaviourPunCallbacks
     }
 
     #endregion
+
 
     void Start()
     {
@@ -66,14 +71,25 @@ public class GameManager : MonoBehaviourPunCallbacks
     /* If we are allowed to move there -> Fire an event. */
     public void MovePlayerToTile(Tile selectedTile)
     {
-        if (!selectedTile.isOccupied) {
+        if (selectedCharacter != null 
+            && !selectedTile.isOccupied 
+            && selectedCharacter.State.CanMove) {
+
             EventHub.Instance.FireEvent(new TileSelectedEvent(selectedTile));
+            //Deselect the character.
+            selectedCharacter.State.CharacterMoved();
         }
     }
 
-    public void SelectPlayer(Interloper interloperHit)
+    public void SelectPlayer(CBaseManager characterHit)
     {
-        EventHub.Instance.FireEvent(new CharacterSelectedEvent(interloperHit.photonView.ViewID));
+        EventHub.Instance.FireEvent(new CharacterSelectedEvent(characterHit.Properties.CharacterID));
+        selectedCharacter = characterHit;
+    }
+
+    public CBaseManager GetSelectedCharacter()
+    {
+        return selectedCharacter;
     }
 
     #endregion
