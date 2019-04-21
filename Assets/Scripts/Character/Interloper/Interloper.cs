@@ -24,14 +24,12 @@ public class Interloper : CBaseManager
     public override void OnEnable()
     {
         EventHub.Instance.AddListener<CharacterSelectedEvent>(UpdateIsSelected);
-        EventHub.Instance.AddListener<EnablePlayerEvent>(UpdateEnabledState);
         base.OnEnable();
     }
 
     public override void OnDisable()
     {
         EventHub.Instance.RemoveListener<CharacterSelectedEvent>(UpdateIsSelected);
-        EventHub.Instance.RemoveListener<EnablePlayerEvent>(UpdateEnabledState);
         base.OnDisable();
     }
 
@@ -42,7 +40,6 @@ public class Interloper : CBaseManager
         if (!photonView.IsMine && PhotonNetwork.IsConnected) {
             return;
         }
-
 
         properties.PlayerID = PhotonNetwork.LocalPlayer.ActorNumber;
         properties.CharacterID = photonView.ViewID;
@@ -72,21 +69,4 @@ public class Interloper : CBaseManager
         }
     }
 
-    /* Needs to run on all instances of the class. */
-    private void UpdateEnabledState(EnablePlayerEvent enabledPlayerEvent)
-    {
-        photonView.RPC("UpdateEnabledStateRPC", RpcTarget.All, enabledPlayerEvent.ActorNumber);
-    }
-
-    [PunRPC]
-    private void UpdateEnabledStateRPC(byte actorNumber)
-    {
-        if (properties.PlayerID == actorNumber) {
-            state.ResetTurn();
-            state.CanMove = true;
-        }
-        else {
-            state.CanMove = false;
-        }
-    }
 }
