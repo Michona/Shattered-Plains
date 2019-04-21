@@ -35,7 +35,7 @@ public class CPlayerHUD : MonoBehaviour
 
     public void Awake()
     {
-        this.transform.SetParent(GameObject.Find("Canvas").GetComponent<Transform>(), false);
+        this.transform.SetParent(GameObject.Find("LeaveButtonCanvas").GetComponent<Transform>(), false);
     }
 
     public void Update()

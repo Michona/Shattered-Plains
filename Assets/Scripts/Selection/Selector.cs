@@ -30,7 +30,7 @@ public class Selector : MonoBehaviourPunCallbacks
 
         //Temporaraly here for testing purpose. 
         if (Input.GetKeyDown(KeyCode.Q)) {
-            TurnManager.Instance.SwitchTurn();
+            TurnManager.Instance.EndTurn();
         }
     }
 }

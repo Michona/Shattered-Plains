@@ -56,7 +56,7 @@ public class GameManager : MonoBehaviourPunCallbacks
     private void LoadArena()
     {
         if (PhotonNetwork.IsMasterClient) {
-            PhotonNetwork.LoadLevel("MainBoard");
+            PhotonNetwork.LoadLevel(Consts.MAIN_MAP);
         }
     }
 
@@ -71,13 +71,17 @@ public class GameManager : MonoBehaviourPunCallbacks
     /* If we are allowed to move there -> Fire an event. */
     public void MovePlayerToTile(Tile selectedTile)
     {
-        if (selectedCharacter != null 
-            && !selectedTile.isOccupied 
-            && selectedCharacter.State.CanMove) {
+        if (selectedCharacter != null) {
+            Debug.Log("IsMyTurn: " + TurnManager.Instance.IsMyTurn() + " tile isOccupied: " + selectedTile.isOccupied + "  canMove: " + selectedCharacter.State.CanMove);
 
-            EventHub.Instance.FireEvent(new TileSelectedEvent(selectedTile));
-            //Deselect the character.
-            selectedCharacter.State.CharacterMoved();
+            if (TurnManager.Instance.IsMyTurn()
+                && !selectedTile.isOccupied
+                && selectedCharacter.State.CanMove) {
+
+                EventHub.Instance.FireEvent(new TileSelectedEvent(selectedTile));
+                //Deselect the character.
+                selectedCharacter.State.CharacterMoved();
+            }
         }
     }
 

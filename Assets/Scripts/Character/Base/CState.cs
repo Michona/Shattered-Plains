@@ -7,6 +7,8 @@ public class CState
     public CState()
     {
         Disable();
+
+        ResetTurn();
     }
 
     private bool canMove;
@@ -34,6 +36,10 @@ public class CState
 
     public void ResetTurn()
     {
+
+        CanMove = true;
+        CanAttack = true;
+
         HasMoved = false;
         //TODO change to false
         HasAttacked = true;

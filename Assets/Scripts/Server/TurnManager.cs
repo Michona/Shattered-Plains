@@ -1,22 +1,27 @@
-﻿using Photon.Pun;
+﻿using ExitGames.Client.Photon;
+using Photon.Pun;
 using Photon.Realtime;
 using System.Collections.Generic;
 using UnityEngine;
 
-/* Runs only on the master client */
+/**
+ * Manages the turns. Public methods to end the turn
+ * Contains information about the current player's turn. 
+ * */
 public class TurnManager : MonoBehaviourPunCallbacks
 {
+    /* Singleton */
     public static TurnManager Instance;
 
     /* Player that has the current turn. */
     private Player currentPlayer;
 
     private Player[] playerList;
-    Dictionary<int, TurnData> turnDataMap = new Dictionary<int, TurnData>();
 
     void Start()
     {
         Instance = this;
+        playerList = PhotonNetwork.PlayerList;
 
         if (PhotonNetwork.IsMasterClient) {
             //Initially the master client has the first turn
@@ -24,37 +29,35 @@ public class TurnManager : MonoBehaviourPunCallbacks
         }
     }
 
-    public override void OnPlayerEnteredRoom(Player player)
+    public override void OnPlayerEnteredRoom(Player other)
     {
         playerList = PhotonNetwork.PlayerList;
-
-        turnDataMap.Add(playerList[0].ActorNumber, new TurnData());
-        turnDataMap.Add(playerList[1].ActorNumber, new TurnData());
     }
 
-    /* #critical Runs only on the master client!! */
-    public void SwitchTurn()
+    /* Calls an RPC to swith the turn using the playerList. */
+    public void EndTurn()
     {
-        if (!PhotonNetwork.IsMasterClient) {
-            return;
-        }
-
-        if (currentPlayer.GetNext() == null) {
-            //Only one player present (for testing purpose).
-            EventHub.Instance.FireEvent(new EnablePlayerEvent(currentPlayer.ActorNumber));
-        }
-        else {
-            EventHub.Instance.FireEvent(new EnablePlayerEvent(currentPlayer.GetNext().ActorNumber));
-            currentPlayer = currentPlayer.GetNext();
+        if (IsMyTurn()) {
+            photonView.RPC("RPCSwitchTurn", RpcTarget.All, PhotonNetwork.LocalPlayer.ActorNumber);
         }
     }
-}
 
-public class TurnData
-{
-    public TurnData()
+    /* Important public method. Should be single source of truth. */
+    public bool IsMyTurn()
     {
-        characterTurns = new Dictionary<int, bool>();
+        return currentPlayer == PhotonNetwork.LocalPlayer;
     }
-    public Dictionary<int, bool> characterTurns;
+
+    [PunRPC]
+    private void RPCSwitchTurn(int callingPlayerActorNumber)
+    {
+        foreach (Player p in playerList) {
+            if (p.ActorNumber == callingPlayerActorNumber) {
+                if (p.GetNext() != null) {
+                    currentPlayer = p.GetNext();
+                    Debug.Log(currentPlayer.NickName);
+                }
+            }
+        }
+    }
 }

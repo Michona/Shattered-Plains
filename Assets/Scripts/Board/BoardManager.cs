@@ -52,6 +52,11 @@ public class BoardManager : MonoBehaviourPunCallbacks
         return closestTileId;
     }
 
+    public Tile GetTileFromTileId(byte tileId)
+    {
+        return GetTileFromList(tileId);
+    }
+
     /* Updates the state of the tile. Usually runs on all clients! */
     public void SetTileState(byte tileId, bool _isOccupied)
     {
@@ -60,8 +65,8 @@ public class BoardManager : MonoBehaviourPunCallbacks
 
     public Vector3[] GetVector3Path(byte startTileId, byte endTileId)
     {
-        for (byte i = 0; i < 3; i ++) {
-            for (byte j = 0; j < 3; j ++) {
+        for (byte i = 0; i < Consts.GRID_SIZE; i ++) {
+            for (byte j = 0; j < Consts.GRID_SIZE; j ++) {
                 visited[i, j] = false;
             }
         }

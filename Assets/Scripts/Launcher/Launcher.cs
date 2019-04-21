@@ -96,7 +96,7 @@ public class Launcher : MonoBehaviourPunCallbacks
         if (PhotonNetwork.CurrentRoom.PlayerCount == 1) {
             // #Critical
             // Load the Room Level.
-            PhotonNetwork.LoadLevel("MainBoard");
+            PhotonNetwork.LoadLevel(Consts.MAIN_MAP);
         }
         Debug.Log("OnJoinedRoom() called by PUN. Now this client is in a room.", this);
     }

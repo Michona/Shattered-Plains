@@ -11,6 +11,7 @@ GameObject:
   - component: {fileID: 5507084505611620430}
   - component: {fileID: 5662854341334843266}
   - component: {fileID: 3617089912509931122}
+  - component: {fileID: 6954621670403074496}
   m_Layer: 0
   m_Name: GameManager
   m_TagString: Untagged
@@ -44,7 +45,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1811e4604f992804f80abf113e75a436, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  interloperGO: {fileID: 8453250643804238092, guid: a10c77eab5d5f154b9660b686fc4b67d,
+  interloperGO: {fileID: 7827856059835747920, guid: 1a62eeeb0de7bf7419149697b56ef88a,
     type: 3}
 --- !u!114 &3617089912509931122
 MonoBehaviour:
@@ -58,3 +59,25 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: bbd0d4364ec688c4f95f7af6b1a7e28f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!114 &6954621670403074496
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5463872888076827159}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: aa584fbee541324448dd18d8409c7a41, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  ObservedComponentsFoldoutOpen: 1
+  Group: 0
+  prefixField: -1
+  Synchronization: 0
+  OwnershipTransfer: 0
+  ObservedComponents:
+  - {fileID: 0}
+  viewIdField: 0
+  InstantiationId: 0
+  isRuntimeInstantiated: 0
