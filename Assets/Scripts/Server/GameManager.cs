@@ -72,7 +72,7 @@ public class GameManager : MonoBehaviourPunCallbacks
     public void MovePlayerToTile(Tile selectedTile)
     {
         if (selectedCharacter != null) {
-            Debug.Log("IsMyTurn: " + TurnManager.Instance.IsMyTurn() + " tile isOccupied: " + selectedTile.isOccupied + "  canMove: " + selectedCharacter.State.CanMove);
+            Debug.Log("Selected tileid: " + selectedTile.Id + " - IsMyTurn: " + TurnManager.Instance.IsMyTurn() + " - isOccupied: " + selectedTile.isOccupied + " - canMove: " + selectedCharacter.State.CanMove);
 
             if (TurnManager.Instance.IsMyTurn()
                 && !selectedTile.isOccupied

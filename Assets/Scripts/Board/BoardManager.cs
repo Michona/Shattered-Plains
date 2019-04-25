@@ -52,6 +52,11 @@ public class BoardManager : MonoBehaviourPunCallbacks
         return closestTileId;
     }
 
+    public Tile GetTileFromVector(Vector3 pos)
+    {
+        return GetTileFromTileId(GetTileIdFromVector(pos));
+    }
+
     public Tile GetTileFromTileId(byte tileId)
     {
         return GetTileFromList(tileId);

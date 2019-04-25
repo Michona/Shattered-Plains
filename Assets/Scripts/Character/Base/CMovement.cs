@@ -1,4 +1,5 @@
 ﻿using Photon.Pun;
+using Photon.Realtime;
 using System.Collections;
 using UnityEngine;
 
@@ -12,17 +13,25 @@ public class CMovement : MonoBehaviourPunCallbacks
         get => currentTilePosition;
         set {
             /* When positon is changed -> move to tile. */
-            MovePlayerToTile(this.gameObject, value);
+            if (isSpawned) {
+                MovePlayerToTile(this.gameObject, value);
+            }
             currentTilePosition = value;
         }
     }
 
+    private bool isSpawned = false;
+
    void Start()
     {
-        if (!photonView.IsMine) {
-            return;
+        if (photonView.IsMine) {
+            currentTilePosition = BoardManager.Instance.GetTileIdFromVector(this.gameObject.transform.position);
+            photonView.RPC("UpdateCurrentTileRPC", RpcTarget.All, BoardManager.Instance.GetTileIdFromVector(this.gameObject.transform.position));
         }
-        currentTilePosition = BoardManager.Instance.GetTileIdFromVector(this.gameObject.transform.position);
+
+        isSpawned = true;
+        
+        Debug.Log("CURRENT TILE :  " + currentTilePosition);
     }
 
     #region EventHub Setup 
