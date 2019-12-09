@@ -13,6 +13,10 @@ public class Launcher : MonoBehaviourPunCallbacks
     [Tooltip("The Ui Panel to let the user enter name, connect and play")]
     [SerializeField]
     private GameObject controlPanel;
+
+    [SerializeField] 
+    private GameObject spawnPositions;
+
     [Tooltip("The UI Label to inform the user that the connection is in progress")]
     [SerializeField]
     private GameObject progressLabel;

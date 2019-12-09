@@ -45,8 +45,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1811e4604f992804f80abf113e75a436, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  interloperGO: {fileID: 7827856059835747920, guid: 1a62eeeb0de7bf7419149697b56ef88a,
-    type: 3}
+  characters:
+  - {fileID: 7827856059835747920, guid: 1a62eeeb0de7bf7419149697b56ef88a, type: 3}
+  - {fileID: 4421569978599252764, guid: e9c6473a34c864efd93bbee2acf2f3dd, type: 3}
 --- !u!114 &3617089912509931122
 MonoBehaviour:
   m_ObjectHideFlags: 0

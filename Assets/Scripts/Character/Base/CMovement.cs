@@ -1,7 +1,9 @@
-﻿using Photon.Pun;
+﻿using System;
+using Photon.Pun;
 using Photon.Realtime;
 using System.Collections;
 using UnityEngine;
+using UnityEngine.PlayerLoop;
 
 /**
  * Responsable for movement. Attached to the character prefab (Needs to have a photonView). 
@@ -20,13 +22,28 @@ public class CMovement : MonoBehaviourPunCallbacks
         }
     }
 
+    /** Gotten from CBaseManger*/
+    private int _moveRange;
+    
     private bool isSpawned = false;
 
-   void Start()
+
+    private void Awake() {
+        _moveRange = gameObject.GetComponent<CBaseManager>().Properties.MoveRange;
+    }
+
+
+    public override void OnPlayerEnteredRoom(Player newPlayer) {
+        base.OnPlayerEnteredRoom(newPlayer);
+        
+        UpdateCurrentTile(new TileSelectedEvent(BoardManager.Instance.GetTileFromVector(this.gameObject.transform.position)));
+    }
+
+    void Start()
     {
         if (photonView.IsMine) {
             currentTilePosition = BoardManager.Instance.GetTileIdFromVector(this.gameObject.transform.position);
-            photonView.RPC("UpdateCurrentTileRPC", RpcTarget.All, BoardManager.Instance.GetTileIdFromVector(this.gameObject.transform.position));
+            photonView.RPC("UpdateCurrentTileRPC", RpcTarget.All, currentTilePosition);
         }
 
         isSpawned = true;
@@ -34,29 +51,20 @@ public class CMovement : MonoBehaviourPunCallbacks
         Debug.Log("CURRENT TILE :  " + currentTilePosition);
     }
 
-    #region EventHub Setup 
-    public override void OnEnable()
-    {
-        EventHub.Instance.AddListener<TileSelectedEvent>(UpdateCurrentTile);
-        base.OnEnable();
-    }
-
-    public override void OnDisable()
-    {
-        EventHub.Instance.RemoveListener<TileSelectedEvent>(UpdateCurrentTile);
-        base.OnDisable();
-    }
-    #endregion
-
-    private void UpdateCurrentTile(TileSelectedEvent e)
+    /** Called from GameManager when the character needs to move. */
+    public void UpdateCurrentTile(TileSelectedEvent e)
     {
         if (!photonView.IsMine) {
             return;
         }
 
-        if (GameManager.Instance.GetSelectedCharacter().State.CanMove) {
+        if (IsInMoveRange(e.SelectedTile.Id)) {
             photonView.RPC("UpdateCurrentTileRPC", RpcTarget.All, e.SelectedTile.Id);
         }
+    }
+
+    public bool IsInMoveRange(byte tileId) {
+        return BoardManager.Instance.GetDistanceBetweenTiles(currentTilePosition, tileId) <= _moveRange;
     }
 
     [PunRPC]

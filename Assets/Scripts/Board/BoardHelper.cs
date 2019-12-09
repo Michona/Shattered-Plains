@@ -1,5 +1,8 @@
 ﻿
 /* Purely static class that deals with arithmetic operations or parsing. */
+
+using UnityEngine;
+
 public static class BoardHelper
 {
 
@@ -20,4 +23,10 @@ public static class BoardHelper
         return (byte)(pos.Row * Consts.GRID_SIZE + pos.Col);
     }
 
+    public static int GetDistanceBetweenTiles(byte fromTileId, byte toTileId) {
+        return GetDistanceBetweenGridPositions(GetColRowFromTileId(fromTileId), GetColRowFromTileId(toTileId));
+    }
+    public static int GetDistanceBetweenGridPositions(GridPosition from, GridPosition to) {
+        return (Mathf.Abs(from.Col - to.Col) + Mathf.Abs(from.Row - to.Row));
+    }
 }

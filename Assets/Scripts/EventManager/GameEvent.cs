@@ -1,5 +1,8 @@
 ﻿
 /* Used in EventHub. Should extend and add data that needs to be passed in the event! */
+
+using UnityEngine;
+
 public class GameEvent
 {
 }
@@ -16,13 +19,23 @@ public class TileSelectedEvent : GameEvent
 
 public class CharacterSelectedEvent : GameEvent
 {
-    public CharacterSelectedEvent(int _characterID)
+    public CharacterSelectedEvent(int characterID, Vector3 characterPosition, int moveDistance)
     {
-        this.CharacterID = _characterID;
+        this.CharacterID = characterID;
+        this.TileId = BoardManager.Instance.GetTileIdFromVector(characterPosition);
+        this.MoveDistance = moveDistance;
     }
 
     /* Photon view id of the game object selected. */
     public int CharacterID;
+    public byte TileId;
+    public int MoveDistance;
+}
+
+public class MovePlayerEvent : GameEvent
+{
+    public MovePlayerEvent() {
+    }
 }
 
 public class EnablePlayerEvent: GameEvent

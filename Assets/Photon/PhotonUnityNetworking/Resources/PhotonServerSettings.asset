@@ -16,7 +16,7 @@ MonoBehaviour:
     AppIdRealtime: 6ca27189-06ec-4879-b76a-77d8df7c0315
     AppIdChat: 
     AppIdVoice: 
-    AppVersion: 2
+    AppVersion: 
     UseNameServer: 1
     FixedRegion: 
     Server: 
@@ -25,19 +25,12 @@ MonoBehaviour:
     EnableLobbyStatistics: 0
     NetworkLogging: 1
   StartInOfflineMode: 0
-  PunLogging: 2
+  PunLogging: 0
   EnableSupportLogger: 0
   RunInBackground: 1
   RpcList:
-  - DestroySpaceship
-  - Fire
-  - RespawnSpaceship
-  - UpdateTileStatus
-  - StartRunningRpc
-  - UpdateTileForAll
-  - SetRunningStateRPC
-  - UpdateCurrentTileRPC
-  - UpdateEnabledStateRPC
   - RPCSwitchTurn
+  - UpdateCurrentTileRPC
+  - UpdateHealthRPC
   DisableAutoOpenWizard: 1
-  ShowSettings: 1
+  ShowSettings: 0

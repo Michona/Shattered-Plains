@@ -2,6 +2,7 @@
  * All properties for a player character.
  * Not changing during the game.
  * */
+
 public class CProperties
 {
     public CProperties(byte health, byte moveRange)

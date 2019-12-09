@@ -10,7 +10,7 @@ public class CState
 
         ResetTurn();
     }
-
+    
     private bool canMove;
     public bool CanMove {
         get => IsSelected && canMove;

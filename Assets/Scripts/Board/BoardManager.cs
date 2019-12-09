@@ -9,7 +9,7 @@ public class BoardManager : MonoBehaviourPunCallbacks
     public static BoardManager Instance;
 
     [SerializeField]
-    private Tile[] Tiles = new Tile[Consts.MAX_TILES];
+    private Tile[] _tiles = new Tile[Consts.MAX_TILES];
 
     #region Pathfinding fields
 
@@ -33,6 +33,8 @@ public class BoardManager : MonoBehaviourPunCallbacks
 
     #region Public Methods
 
+    public Tile[] TileList => _tiles;
+
     public Vector3 GetVectorFromTileId(byte tileId)
     {
         return GetTileFromList(tileId).gameObject.transform.position;
@@ -43,7 +45,7 @@ public class BoardManager : MonoBehaviourPunCallbacks
         float distance = float.MaxValue;
         byte closestTileId = 0;
 
-        foreach (Tile tile in Tiles) {
+        foreach (Tile tile in _tiles) {
             if (Vector3.Distance(tile.gameObject.transform.position, pos) < distance) {
                 distance = Vector3.Distance(tile.gameObject.transform.position, pos);
                 closestTileId = tile.Id;
@@ -115,6 +117,60 @@ public class BoardManager : MonoBehaviourPunCallbacks
         return GetPathList(endTileId).ConvertAll(new Converter<byte, Vector3>(GetVectorFromTileId)).ToArray();
     }
 
+    /** Gets the proper BFS distance*/
+    public int GetDistanceBetweenTiles(byte startTileId, byte endTileId) {
+        for (byte i = 0; i < Consts.GRID_SIZE; i ++) {
+            for (byte j = 0; j < Consts.GRID_SIZE; j ++) {
+                visited[i, j] = false;
+            }
+        }
+
+        int[] distanceOfOrigin = new int[Consts.MAX_TILES];
+        for (int i = 0; i < distanceOfOrigin.Length; i++) {
+            distanceOfOrigin[i] = Int32.MaxValue;
+        }
+
+        GridPosition startV = BoardHelper.GetColRowFromTileId(startTileId);
+
+        queue.Enqueue(startTileId);
+        distanceOfOrigin[startTileId] = 0;
+        visited[startV.Col, startV.Row] = true;
+
+        while (queue.Count > 0) {
+
+            byte currentTile = queue.Dequeue();
+
+            if (currentTile == endTileId) {
+                queue.Clear();
+                break;
+            }
+
+            int topX = BoardHelper.GetColRowFromTileId(currentTile).Col;
+            int topY = BoardHelper.GetColRowFromTileId(currentTile).Row;
+
+            for (byte i = 0; i < 4; i ++) {
+
+                if (topX + dx[i] >= 0 && topX + dx[i] < Consts.GRID_SIZE && topY + dy[i] >= 0 && topY + dy[i] < Consts.GRID_SIZE) {
+
+                    GridPosition adjecentTile = new GridPosition(topX + dx[i], topY + dy[i]);
+
+                    if (!visited[adjecentTile.Col, adjecentTile.Row]
+                        && !GetTileFromList(BoardHelper.GetTileIdFromColRow(adjecentTile)).isOccupied) {
+
+
+                        distanceOfOrigin[BoardHelper.GetTileIdFromColRow(adjecentTile)] =
+                            distanceOfOrigin[currentTile] + 1;
+                        
+                        queue.Enqueue(BoardHelper.GetTileIdFromColRow(adjecentTile));
+                        visited[adjecentTile.Col, adjecentTile.Row] = true;
+                    }
+                }
+            }
+        }
+
+        return distanceOfOrigin[endTileId];
+    }
+
     #endregion
 
     private List<byte> GetPathList(int curr)
@@ -133,9 +189,9 @@ public class BoardManager : MonoBehaviourPunCallbacks
     }
 
     /* The tiles have to be ordered in the prefab! */
-    private Tile GetTileFromList(byte tileId)
+    public Tile GetTileFromList(byte tileId)
     {
-        return Tiles[tileId];
+        return _tiles[tileId];
     }
 
 }
