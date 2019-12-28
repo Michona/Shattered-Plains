@@ -70,6 +70,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   PlayerUiPrefab: {fileID: 3691491609990084587, guid: cd0c94e146b69f544aee07fc650d96c6,
     type: 3}
+  PlayerHighlight: {fileID: 8647184758826491391, guid: 2521bc8482f39455eb9d4ed2e196b2e1,
+    type: 3}
 --- !u!114 &5021319221381233681
 MonoBehaviour:
   m_ObjectHideFlags: 0

@@ -31,6 +31,5 @@ MonoBehaviour:
   RpcList:
   - RPCSwitchTurn
   - UpdateCurrentTileRPC
-  - UpdateHealthRPC
   DisableAutoOpenWizard: 1
   ShowSettings: 0

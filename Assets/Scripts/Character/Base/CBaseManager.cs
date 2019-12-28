@@ -10,6 +10,8 @@ public abstract class CBaseManager : MonoBehaviourPunCallbacks
 {
     public GameObject PlayerUiPrefab;
 
+    [SerializeField] private GameObject PlayerHighlight;
+
     #region Abstract Fields
 
     /* Character properties that don't change during the game. Contains PlayerID and CharacterID. */
@@ -39,10 +41,13 @@ public abstract class CBaseManager : MonoBehaviourPunCallbacks
 
     #endregion
 
+    /** Called only on Mine characters. */
     protected void InstantiatePlayerUI() {
         playerHUD = Instantiate(this.PlayerUiPrefab);
         playerHUD.SendMessage("SetTarget", this, SendMessageOptions.RequireReceiver);
         playerHUD.SetActive(false);
+
+        PlayerHighlight = Instantiate(PlayerHighlight, gameObject.transform, false);
     }
 
     private void OnLevelFinishedLoading(Scene scene, LoadSceneMode mode) {
